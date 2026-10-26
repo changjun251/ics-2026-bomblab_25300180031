@@ -20,18 +20,33 @@ static int write_answer(char *out, size_t cap, const uint32_t *values, size_t co
 }
 
 int solve_phase_1(uint64_t challenge, char *out, size_t cap) {
-    uint32_t values[MAX_FIELDS] = {0};
-    size_t count = 0;
-    (void)challenge;
-    // TODO: 根据 phase_01 的汇编，用 challenge 算出口令中的各个整数，依次存入 values，并把 count 改为整数个数。
+    uint32_t values[1] = {0};
+    size_t count = 1;
+    uint64_t x = challenge;
+    uint32_t x_shr = (uint32_t) (x >> 32);
+
+    uint32_t a1 = ((uint32_t)((x >> 16) + 0xbf21)) ^ ((uint32_t)(5 * (x >> 32)));
+    uint32_t a2 = (uint32_t)((x_shr ^ 0xa32b) + 4 * (uint32_t)x);
+    values[0] = ((uint32_t)(a2 + 2 * a1)) ^ 0x9bd1; 
     return write_answer(out, cap, values, count);
 }
 
 int solve_phase_2(uint64_t challenge, char *out, size_t cap) {
-    uint32_t values[MAX_FIELDS] = {0};
-    size_t count = 0;
-    (void)challenge;
-    // TODO: 根据 phase_02 的汇编，用 challenge 算出口令中的各个整数，依次存入 values，并把 count 改为整数个数。
+    uint32_t values[6] = {0};
+    size_t count = 6;
+    uint64_t x = challenge;
+    uint32_t temp = ((uint32_t)(x >> 7)) * 2;
+    values[0] = (temp & 0x1e) + 0x1a;
+    int d = 0;
+    int c = 13;
+    for (int i = 1; i <= 5; i++) {
+        d += 15;
+	c += 3;
+        temp = ((uint32_t)(x >> (13 + 3*i))) & 0x3f;
+	temp += values[i - 1];
+	temp = temp ^ d;
+        values[i] = temp;
+    }
     return write_answer(out, cap, values, count);
 }
 
