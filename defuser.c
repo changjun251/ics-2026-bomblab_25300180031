@@ -141,7 +141,8 @@ struct node{
 
 struct node node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12;
 
-// 3. 按照你的要求生成 node1 ~ node12 (一一对应 0x405b60 ~ 0x405c10)
+// 3. 按照你的要求
+// e node1 ~ node12 (一一对应 0x405b60 ~ 0x405c10)
 struct node node1  = { &node10, 0x00000537, 0x00005be8 };  // 0x405b60
 struct node node2  = { &node3,  0x0000013f, 0x00008483 };  // 0x405b70
 struct node node3  = { &node7,  0x00000626, 0x00004705 };  // 0x405b80
